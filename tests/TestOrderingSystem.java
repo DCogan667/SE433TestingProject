@@ -12,11 +12,14 @@ public class TestOrderingSystem
   private final PrintStream originalOut = System.out;
   
   private final String catalogText = "Enter the number of the product you want to order: 1) Air Filter 11.95 " +
-          "2) SAE 0W20 Oil 15.50 3) Spark Plugs 32.65 4) Seat Covers 295.50 5) Floor Mats 195.50 " +
+          "2) SAE 0W20 Oil 15.50 3) Spark Plugs 32.65 4) Seat Covers 295.50 5) Floor Mats 99.99 " +
           "6) Sunshade 35.80 7) Dash cam 493.88 8) Phone Mount 25.75 9) Head Rest Cover 45.83 " +
           "10) Bluetooth Adapter 85.90 11) Emergency Kit 95.11 12) Radial Tire 85.60 " +
           "13) Brake Pads and Calipers 455.65 14) 12-volt Battery 85.50 " +
           "15) Toy Yoda Camry 24,995.00 16) Toy Yoda Prius Prime 42,850.00 ";
+
+  private final String testCatalogText = "Enter the number of the product you want to order:  1) Product A 99,999.98 " +
+          "2) Product B 99,999.99 3) One Penny Product 0.01 4) Fifty Bucks 49.99 5) Product C 99,999.97 ";
 
   private final static String addedPadsMessage = "Brake Pads and Calipers has been added to the shopping cart.\n";
 
@@ -164,6 +167,65 @@ public class TestOrderingSystem
   }
 
   @Test
+  void OrderTooMuchOfAnItemWithinAPenny()
+  {
+    // Use the test catalog to try to add something for 99,999.98 and add 2 things that are worth a penny
+    // use a special test catalog so it's not what the user sees.
+    String simulatedInput = "Jim\nNJ\nS\nA\n1\n1\nA\n3\n1\nA\n3\n1\nX\n";
+
+    String addedMessage1 = "Product A has been added to the shopping cart. ";
+    String addedMessage2 = "One Penny Product has been added to the shopping cart. ";
+
+    String expected = startupString + testCatalogText  + Messages.quantityToAddPrompt + addedMessage1
+            + Messages.menu2 + testCatalogText  + Messages.quantityToAddPrompt + addedMessage2
+            + Messages.menu2 + testCatalogText  + Messages.quantityToAddPrompt
+            + Messages.cartTooLargeMessage + Messages.menu2 + Messages.goodbyeMessage;
+
+    RunTestOrder(simulatedInput, expected, "TestCatalog.csv");
+  }
+
+  @Test
+  void ChangeQtyTooMuchWithinAPenny()
+  {
+    // Use the test catalog to try to add something for 99,999.97 and add 1 thing worth a penny
+    // and try to change it to 2 then to 3
+    String simulatedInput = "Jim\nNJ\nS\nA\n5\n1\nA\n3\n1\nE\n2\n2\nE\n2\n3\nX\n";
+
+    String addedMessage1 = "Product C has been added to the shopping cart. ";
+    String addedMessage2 = "One Penny Product has been added to the shopping cart. ";
+
+    String testCart = "1) Product C quantity: 1, total cost:99,999.97 2) One Penny Product quantity: 1, total cost:0.01 ";
+    String testCart2 = "1) Product C quantity: 1, total cost:99,999.97 2) One Penny Product quantity: 2, total cost:0.02 ";
+
+    String expected = startupString + testCatalogText  + Messages.quantityToAddPrompt + addedMessage1
+            + Messages.menu2 + testCatalogText  + Messages.quantityToAddPrompt + addedMessage2
+            + Messages.menu2 + Messages.editNumberPrompt + testCart  + Messages.newQuantityPrompt + Messages.quantityUpdatedMessage
+            + Messages.menu2 + Messages.editNumberPrompt + testCart2  + Messages.newQuantityPrompt + Messages.orderTooLargeMessage
+            + Messages.menu2 + Messages.goodbyeMessage;
+
+    RunTestOrder(simulatedInput, expected, "TestCatalog.csv");
+  }
+
+  @Test
+  void OrderTooMuchOfAnItemWithinAPenny2()
+  {
+    // Use the test catalog to try to add something for 99,999.98 and add 2 things that are worth a penny
+    // use a special test catalog so it's not what the user sees.
+    String simulatedInput = "Jim\nNJ\nS\nA\n2\n1\nA\n3\n1\nA\n3\n1\nX\n";
+
+    String addedMessage1 = "Product B has been added to the shopping cart. ";
+    String addedMessage2 = "One Penny Product has been added to the shopping cart. ";
+
+    String expected = startupString + testCatalogText  + Messages.quantityToAddPrompt + addedMessage1
+            + Messages.menu2 + testCatalogText  + Messages.quantityToAddPrompt + Messages.cartTooLargeMessage
+            + Messages.menu2 + testCatalogText  + Messages.quantityToAddPrompt + Messages.cartTooLargeMessage
+            + Messages.menu2 + Messages.goodbyeMessage;
+
+    RunTestOrder(simulatedInput, expected, "TestCatalog.csv");
+  }
+
+
+  @Test
   void Order10OfAnItemViewCartAndCheckOutTaxableIL()
   {
     // This is IL, so add tax, no shipping because it's over the limit
@@ -199,8 +261,8 @@ public class TestOrderingSystem
   void Order1OfAnItemIncorrectChoiceAndCheckOut()
   {
     // This is IL, so add tax, no shipping because it's over the limit
-    //   The 22 and -1 below are invalid choices
-    String simulatedInput = "Sally\nIL\nN\nA\n22\n-1\n13\n1\nO\n";
+    //   The 22 and -1 below are invalid choices and 0 and 17 for borders
+    String simulatedInput = "Sally\nIL\nN\nA\n22\n-1\n0\n17\n13\n1\nO\n";
 
     String cartContents = "1) Brake Pads and Calipers quantity: 1, total cost:455.65 ";
     String lastMessage = "Thank you for the order, Sally Your order will be sent using next day shipping. " +
@@ -209,7 +271,7 @@ public class TestOrderingSystem
 
     String choiceError = "Enter a number between 1 and 16: ";
 
-    String expected = startupString + catalogText + choiceError + choiceError
+    String expected = startupString + catalogText + choiceError + choiceError + choiceError + choiceError
             + Messages.quantityToAddPrompt + addedPadsMessage
             +Messages.menu2 + lastMessage;
     RunTestOrder(simulatedInput, expected);
@@ -293,7 +355,7 @@ public class TestOrderingSystem
     // This is NJ, no tax, standard shipping
     // the 4 below is item #4 we try to remove. That should fail.
     // Then try again with the 1 option
-    String simulatedInput = "Paul\nNJ\nS\nA\n13\n1\nA\n1\n1\nR\n4\n1\nO\n";
+    String simulatedInput = "Paul\nNJ\nS\nA\n13\n1\nA\n1\n1\nR\n0\n-1\n3\n1\nO\n";
 
     String cartContents = "1) Brake Pads and Calipers quantity: 1, total cost:455.65 ";
     String addedFilterMessage = "Air Filter has been added to the shopping cart. ";
@@ -306,7 +368,7 @@ public class TestOrderingSystem
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             + Messages.menu2 + catalogText + Messages.quantityToAddPrompt + addedFilterMessage
-            + Messages.menu2 + Messages.removeNumberPrompt + shoppingCart2 + removalError + Messages.removedMessage
+            + Messages.menu2 + Messages.removeNumberPrompt + shoppingCart2 + removalError + removalError+ removalError+ Messages.removedMessage
             + Messages.menu2 + lastMessage;
     RunTestOrder(simulatedInput, expected);
   }
@@ -356,6 +418,34 @@ public class TestOrderingSystem
   }
 
   @Test
+  void CheckTotalsNear50Dollars()
+  {
+    // New in this test is the get total function near $50. Test at 49.99, 50.00 and 50.01.
+    // Only 50.01 should be free shipping
+    String simulatedInput = "Paul\nNJ\nS\nA\n4\n1\nT\nA\n3\n1\nT\nA\n3\n1\nT\nO\n";
+
+    String addedMessage1 = "Fifty Bucks has been added to the shopping cart. ";
+    String addedMessage2 = "One Penny Product has been added to the shopping cart. ";
+
+    String totalMessage1 = "Total cost of items in cart: $49.99 Shipping: $10.00 Tax: $0.00 Grand total: $59.99 ";
+    String totalMessage2 = "Total cost of items in cart: $50.00 Shipping: $10.00 Tax: $0.00 Grand total: $60.00 ";
+    String totalMessage3 = "Total cost of items in cart: $50.01 Shipping: $0.00 Tax: $0.00 Grand total: $50.01 ";
+
+    String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
+            "Your total cost is: Total cost of items in cart: $50.01 Shipping: $0.00 " +
+            "Tax: $0.00 Grand total: $50.01 ";
+
+    String expected = startupString + testCatalogText + Messages.quantityToAddPrompt + addedMessage1
+            + Messages.menu2 + totalMessage1
+            + Messages.menu2 + testCatalogText + Messages.quantityToAddPrompt + addedMessage2
+            + Messages.menu2 + totalMessage2
+            + Messages.menu2 + testCatalogText + Messages.quantityToAddPrompt + addedMessage2
+            + Messages.menu2 + totalMessage3
+            + Messages.menu2 + lastMessage;
+    RunTestOrder(simulatedInput, expected, "TestCatalog.csv");
+  }
+
+  @Test
   void Order10OfAnItemViewCarAndEditQuantityWithError()
   {
     // This is NJ, no tax, no shipping because it's over the limit
@@ -390,6 +480,28 @@ public class TestOrderingSystem
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedMessage
             + Messages.menu2 + Messages.editNumberPrompt + cartContents  + Messages.newQuantityPrompt  + Messages.orderTooLargeMessage
+            + Messages.menu2 + lastMessage;
+    RunTestOrder(simulatedInput, expected);
+  }
+
+  @Test
+  void TryToExceedLimitByEditingQuantityCloseProximity()
+  {
+    // This is NJ, no tax, no shipping because it's over the limit
+    String simulatedInput = "Paul\nNJ\nS\nA\n15\n4\nA\n1\n1\nE\n2\n2\nO\n";
+
+    String cartContents1 = "1) Toy Yoda Camry quantity: 4, total cost:99,980.00 2) Air Filter quantity: 1, total cost:11.95 ";
+    String addedMessage1 = "Toy Yoda Camry has been added to the shopping cart. ";
+    String addedMessage2 = "Air Filter has been added to the shopping cart. ";
+
+    String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
+            "Your total cost is: Total cost of items in cart: $99,991.95 Shipping: $0.00 " +
+            "Tax: $0.00 Grand total: $99,991.95 ";
+
+    String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedMessage1
+            + Messages.menu2 + catalogText + Messages.quantityToAddPrompt + addedMessage2
+            + Messages.menu2 + Messages.editNumberPrompt + cartContents1   + Messages.newQuantityPrompt
+            + Messages.orderTooLargeMessage
             + Messages.menu2 + lastMessage;
     RunTestOrder(simulatedInput, expected);
   }

@@ -1,0 +1,6 @@
+1001,Product A,99999.98
+1002,Product B,99999.99
+A Bad line here to test bad data in the CSV
+1003,One Penny Product, 0.01
+1004,Fifty Bucks, 49.99
+1001,Product C,99999.97

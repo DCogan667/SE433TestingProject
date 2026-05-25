@@ -55,8 +55,8 @@ public class TestShoppingCart
     //make sure cart is empty
     assertTrue(cart.isEmpty());
 
-    cart.AddToCart(product,1);
-    cart.AddToCart(product,1);
+    assertTrue(cart.AddToCart(product,1));
+    assertTrue(cart.AddToCart(product,1));
 
     assertEquals(1, cart.size());
 
@@ -76,8 +76,8 @@ public class TestShoppingCart
     //make sure cart is empty
     assertTrue(cart.isEmpty());
 
-    cart.AddToCart(product,1);
-    cart.AddToCart(product2,1);
+    assertTrue(cart.AddToCart(product,1));
+    assertTrue(cart.AddToCart(product2,1));
 
     assertEquals(2, cart.size());
 
@@ -98,13 +98,13 @@ public class TestShoppingCart
     //make sure cart is empty
     assertTrue(cart.isEmpty());
 
-    cart.AddToCart(product,1);
-    cart.AddToCart(product2,1);
+    assertTrue(cart.AddToCart(product,1));
+    assertTrue(cart.AddToCart(product2,1));
 
     assertEquals(2, cart.size());
 
-    cart.removeItem(1);
-    cart.removeItem(0);
+    assertTrue(cart.removeItem(1));
+    assertTrue(cart.removeItem(0));
 
     assertTrue(cart.isEmpty());
   }
@@ -148,7 +148,7 @@ public class TestShoppingCart
     //make sure cart is empty
     assertTrue(cart.isEmpty());
 
-    cart.AddToCart(product,1);
+    boolean addTest = cart.AddToCart(product,1);
     cart.AddToCart(product2,1);
 
     System.setOut(new PrintStream(outputStream));
@@ -159,6 +159,7 @@ public class TestShoppingCart
 
     String result = outputStream.toString().trim();
 
+    assertTrue(addTest);
     assertEquals("1)  test quantity: 1, total cost:45.50\r\n2)  test2 quantity: 1, total cost:145.50", result);
   }
 
@@ -167,15 +168,14 @@ public class TestShoppingCart
 
     Product product = new Product(42, "test", 99999.50);
     Product product2 = new Product(44, "test2", 0.50);
+    Product product3 = new Product(46, "test3", 0.49);
     ShoppingCart cart = new ShoppingCart();
 
-    boolean result1 = cart.AddToCart(product,1);
-    boolean result2 = cart.AddToCart(product2,1);
+    assertTrue(cart.AddToCart(product,1));
+    assertFalse(cart.AddToCart(product2,1));
+    assertTrue(cart.AddToCart(product3,1));
 
-    assertEquals(cart.size(), 1);
-
-    assertTrue(result1);
-    assertFalse(result2);
+    assertEquals(cart.size(), 2);
   }
 
 

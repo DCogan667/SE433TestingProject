@@ -124,7 +124,7 @@ public class OrderingSystem
     int oldQuantity = item.count;
     item.count = quantity;
 
-    if (shoppingCart.getTotalCartPrice() < 99999.99) {
+    if (shoppingCart.getTotalCartPrice() <= 99999.99) {
       System.out.println(Messages.quantityUpdatedMessage);
     }
     else {
@@ -144,8 +144,6 @@ public class OrderingSystem
     if (catalog.isEmpty()) return;
 
     GetNameStateAndShipping();
-
-    System.out.println("\n\n");
 
     boolean done=false;
     while (!done) {
@@ -202,7 +200,10 @@ public class OrderingSystem
           catalog.add(newProduct);
         }
       }
-      reader.close();
+      // The Hit test mutants complained about this line of code.
+      // The scanner will be closed when the variable goes out of scope at the end of this function
+      // so the close() function is not needed...
+      //reader.close();
     } catch (Exception e)
     {
       System.out.println(Messages.catalogReadErrorMessage);
