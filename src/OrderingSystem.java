@@ -10,6 +10,8 @@ public class OrderingSystem
   private String State="";
   private ShippingType shippingType=ShippingType.STANDARD;
 
+  private final Scanner scan;
+
   private final ArrayList<Product> catalog;
   private final ShoppingCart shoppingCart;
 
@@ -21,7 +23,6 @@ public class OrderingSystem
     }
     int selection =0;
     while (selection > catalog.size() || selection <=0)     {
-      Scanner scan = new Scanner(System.in);
       String line = scan.nextLine();
       selection = Integer.parseInt(line);
       if (selection > catalog.size() || selection <=0)
@@ -31,7 +32,6 @@ public class OrderingSystem
   }
 
   private int getAQuantity(int max) {
-    Scanner scan = new Scanner(System.in);
     int quantity=0;
     while (quantity <= 0 || quantity >max)     {
       String line = scan.nextLine();
@@ -63,9 +63,8 @@ public class OrderingSystem
         System.out.println("O = Check out");
       }
 
-      Scanner scan = new Scanner(System.in);
-      String line = scan.nextLine().toUpperCase();
-      char c =  line.charAt(0);
+      String line = scan.nextLine();
+      char c =  line.toUpperCase().charAt(0);
 
       if (line.length() == 1 && "AXTCEOR".indexOf(c) != -1)
         return line;
@@ -73,20 +72,18 @@ public class OrderingSystem
   }
 
   private void GetNameStateAndShipping()   {
-    Scanner scan = new Scanner(System.in);
-
-    System.out.println("\nWelcome to the Toy Yoda ordering system");
-    System.out.println("Please enter your name to begin:\n");
+    System.out.println("\n"+Messages.welcomeMessage);
+    System.out.println(Messages.namePrompt);
     Name  = scan.nextLine();
     while (State.length() != 2) {
-      System.out.println("Please enter your 2-letter state abbreviation:\n");
+      System.out.println(Messages.stateMessage);
       State  = scan.nextLine();
     }
     State = State.toUpperCase();
 
     String shipping = "";
     while (!shipping.equals("S") && !shipping.equals("N")) {
-      System.out.println("Please enter your shipping preference:\nS=Standard\nN=Next day:\n");
+      System.out.println(Messages.shipMenu);
       shipping =  scan.nextLine();
       shipping = shipping.toUpperCase();
     }
@@ -97,7 +94,7 @@ public class OrderingSystem
   private void AddToCart()
   {
     Product product = GetSelectedProduct();
-    System.out.println("Enter how many to add to cart (up to 100)");
+    System.out.println(Messages.quantityToAddPrompt);
     int quantity = getAQuantity(100);
     if (shoppingCart.AddToCart(product, quantity))
       System.out.println(product.name +" has been added to the shopping cart.");
@@ -121,29 +118,29 @@ public class OrderingSystem
 
   private void EditQuantity() {
     int itemNumber =  GetSelectedCartItem("edit");
-    System.out.println("Enter new quantity (up to 100)");
+    System.out.println(Messages.newQuantityPrompt);
     int quantity = getAQuantity(100);
     LineItem item = shoppingCart.getLineItem(itemNumber-1);
     int oldQuantity = item.count;
     item.count = quantity;
 
     if (shoppingCart.getTotalCartPrice() < 99999.99) {
-      System.out.println("Quantity updated.");
+      System.out.println(Messages.quantityUpdatedMessage);
     }
     else {
-      System.out.println("The total for the order cannot exceed $99,999.99.");
+      System.out.println(Messages.orderTooLargeMessage);
       item.count = oldQuantity;
     }
   }
 
   private void RemoveItem() {
     int itemNumber =  GetSelectedCartItem("remove");
-    if (shoppingCart.removeItem(itemNumber-1))
-      System.out.println("Item removed.");
+    shoppingCart.removeItem(itemNumber-1);
+    System.out.println(Messages.removedMessage);
   }
 
-  public void HandleOrder() {
-    populateCatalog();
+  public void HandleOrder(String catalogFilename) {
+    populateCatalog(catalogFilename);
     if (catalog.isEmpty()) return;
 
     GetNameStateAndShipping();
@@ -155,7 +152,7 @@ public class OrderingSystem
       String pick = GetSelection();
       switch (pick) {
         case "X":  // exit
-          System.out.println("Goodbye and have a nice day. ");
+          System.out.println(Messages.goodbyeMessage);
           return;
 
         case "C":  // see contents of cart
@@ -179,7 +176,7 @@ public class OrderingSystem
       }
     }
     if (shoppingCart.isEmpty())
-      System.out.println("You have nothing in your cart. The order is abandoned. See you later.");
+      System.out.println(Messages.abandonedMessage);
     else {
       System.out.println("Thank you for the order, " + Name);
       System.out.println("Your order will be sent using " +
@@ -188,27 +185,33 @@ public class OrderingSystem
     }
   }
 
-  private void populateCatalog(){
-    File in_file = new File("catalog.csv");
-    try {
+  private void populateCatalog(String CatalogFileName)
+  {
+    File in_file = new File(CatalogFileName);
+    try
+    {
       Scanner reader = new Scanner(in_file);
 
-      while (reader.hasNextLine()) {
+      while (reader.hasNextLine())
+      {
         String text_line = reader.nextLine();
         String[] parts = text_line.split(",");
-        if (parts.length == 3)  {
+        if (parts.length == 3)
+        {
           Product newProduct = new Product(Integer.parseInt(parts[0]), parts[1], Double.parseDouble(parts[2]));
           catalog.add(newProduct);
         }
       }
       reader.close();
-    } catch (Exception e) {
-      System.out.println("Error reading part catalog. Please re-install application.");
+    } catch (Exception e)
+    {
+      System.out.println(Messages.catalogReadErrorMessage);
     }
   }
   public OrderingSystem()
   {
     catalog = new ArrayList<>();
     shoppingCart = new ShoppingCart();
+    scan = new Scanner(System.in);
   }
 }
