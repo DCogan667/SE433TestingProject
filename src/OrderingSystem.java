@@ -24,7 +24,10 @@ public class OrderingSystem
     int selection =0;
     while (selection > catalog.size() || selection <=0)     {
       String line = scan.nextLine();
-      selection = Integer.parseInt(line);
+      try       {
+        selection = Integer.parseInt(line);
+      } catch(NumberFormatException e) {
+        selection = -1; }
       if (selection > catalog.size() || selection <=0)
         System.out.println("\nEnter a number between 1 and "+catalog.size()+":\n ");
     }
@@ -35,7 +38,10 @@ public class OrderingSystem
     int quantity=0;
     while (quantity <= 0 || quantity >max)     {
       String line = scan.nextLine();
-      quantity = Integer.parseInt(line);
+      try       {
+        quantity = Integer.parseInt(line);
+      } catch(NumberFormatException e) {
+        quantity = -1; }
       if (quantity <= 0 || quantity > max)
         System.out.println("\nEnter a number between 1 and "+max+":\n ");
     }
@@ -50,7 +56,7 @@ public class OrderingSystem
 
   private String GetSelection() {
     while (true) {
-      System.out.println("\nMake a selection from this list (enter one letter and press Enter:");
+      System.out.println("\nMake a selection from this list (enter one letter and press Enter):");
       System.out.println("A = Add item to the shopping cart");
 
       if (shoppingCart.isEmpty()) {
@@ -180,6 +186,7 @@ public class OrderingSystem
       System.out.println("Your order will be sent using " +
               (shippingType==ShippingType.STANDARD?"standard":"next day") + " shipping.\nYour total cost is:");
       DisplayTotals();
+      System.out.println("Transaction completed");
     }
   }
 

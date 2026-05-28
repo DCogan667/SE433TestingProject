@@ -16,13 +16,13 @@ public class Messages
           """;
 
   public final static String menu1 = """
-          Make a selection from this list (enter one letter and press Enter:
+          Make a selection from this list (enter one letter and press Enter):
           A = Add item to the shopping cart
           X = Exit
           """;
 
   public final static String menu2 = """
-          Make a selection from this list (enter one letter and press Enter:
+          Make a selection from this list (enter one letter and press Enter):
           A = Add item to the shopping cart
           T = Get current total
           C = See contents of shopping cart

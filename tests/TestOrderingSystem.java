@@ -148,7 +148,7 @@ public class TestOrderingSystem
     String cartContents = "1) Brake Pads and Calipers quantity: 100, total cost:45,565.00 ";
     String lastMessage = "Thank you for the order, Jim Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $45,565.00 Shipping: $0.00 " +
-            "Tax: $0.00 Grand total: $45,565.00 ";
+            "Tax: $0.00 Grand total: $45,565.00 Transaction completed";
 
     String expected = startupString + catalogText  + Messages.quantityToAddPrompt + addedPadsMessage
             + Messages.menu2 + cartContents + Messages.menu2 + lastMessage;
@@ -234,7 +234,7 @@ public class TestOrderingSystem
     String cartContents = "1) Brake Pads and Calipers quantity: 100, total cost:45,565.00 ";
     String lastMessage = "Thank you for the order, Sally Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $45,565.00 Shipping: $0.00 " +
-            "Tax: $2,733.90 Grand total: $48,298.90 ";
+            "Tax: $2,733.90 Grand total: $48,298.90 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             +Messages.menu2 + cartContents + Messages.menu2 + lastMessage;
@@ -250,7 +250,7 @@ public class TestOrderingSystem
     String cartContents = "1) Brake Pads and Calipers quantity: 100, total cost:45,565.00 ";
     String lastMessage = "Thank you for the order, Sally Your order will be sent using next day shipping. " +
             "Your total cost is: Total cost of items in cart: $45,565.00 Shipping: $25.00 " +
-            "Tax: $2,733.90 Grand total: $48,323.90 ";
+            "Tax: $2,733.90 Grand total: $48,323.90 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             +Messages.menu2 + cartContents + Messages.menu2 + lastMessage;
@@ -262,16 +262,16 @@ public class TestOrderingSystem
   {
     // This is IL, so add tax, no shipping because it's over the limit
     //   The 22 and -1 below are invalid choices and 0 and 17 for borders
-    String simulatedInput = "Sally\nIL\nN\nA\n22\n-1\n0\n17\n13\n1\nO\n";
+    String simulatedInput = "Sally\nIL\nN\nA\n22\n-1\n0\n17\nSix\n13\n1\nO\n";
 
     String cartContents = "1) Brake Pads and Calipers quantity: 1, total cost:455.65 ";
     String lastMessage = "Thank you for the order, Sally Your order will be sent using next day shipping. " +
             "Your total cost is: Total cost of items in cart: $455.65 Shipping: $25.00 " +
-            "Tax: $27.34 Grand total: $507.99 ";
+            "Tax: $27.34 Grand total: $507.99 Transaction completed";
 
     String choiceError = "Enter a number between 1 and 16: ";
 
-    String expected = startupString + catalogText + choiceError + choiceError + choiceError + choiceError
+    String expected = startupString + catalogText + choiceError + choiceError + choiceError + choiceError + choiceError
             + Messages.quantityToAddPrompt + addedPadsMessage
             +Messages.menu2 + lastMessage;
     RunTestOrder(simulatedInput, expected);
@@ -286,7 +286,7 @@ public class TestOrderingSystem
     String cartContents = "1) Brake Pads and Calipers quantity: 100, total cost:45,565.00 ";
     String lastMessage = "Thank you for the order, Sally Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $45,565.00 Shipping: $0.00 " +
-            "Tax: $2,733.90 Grand total: $48,298.90 ";
+            "Tax: $2,733.90 Grand total: $48,298.90 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             +Messages.menu2 + cartContents + Messages.menu2 + lastMessage;
@@ -302,7 +302,7 @@ public class TestOrderingSystem
     String cartContents = "1) Brake Pads and Calipers quantity: 100, total cost:45,565.00 ";
     String lastMessage = "Thank you for the order, Sally Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $45,565.00 Shipping: $0.00 " +
-            "Tax: $2,733.90 Grand total: $48,298.90 ";
+            "Tax: $2,733.90 Grand total: $48,298.90 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             +Messages.menu2 + cartContents + Messages.menu2 + lastMessage;
@@ -319,7 +319,7 @@ public class TestOrderingSystem
 
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $45,109.35 Shipping: $0.00 " +
-            "Tax: $0.00 Grand total: $45,109.35 ";
+            "Tax: $0.00 Grand total: $45,109.35 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             +Messages.menu2 + Messages.editNumberPrompt + cartContents + Messages.newQuantityPrompt
@@ -340,7 +340,7 @@ public class TestOrderingSystem
 
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $11.95 Shipping: $10.00 " +
-            "Tax: $0.00 Grand total: $21.95 ";
+            "Tax: $0.00 Grand total: $21.95 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             + Messages.menu2 + catalogText + Messages.quantityToAddPrompt + addedFilterMessage
@@ -355,7 +355,7 @@ public class TestOrderingSystem
     // This is NJ, no tax, standard shipping
     // the 4 below is item #4 we try to remove. That should fail.
     // Then try again with the 1 option
-    String simulatedInput = "Paul\nNJ\nS\nA\n13\n1\nA\n1\n1\nR\n0\n-1\n3\n1\nO\n";
+    String simulatedInput = "Paul\nNJ\nS\nA\n13\n1\nA\n1\n1\nR\n0\n-1\nSix\n3\n1\nO\n";
 
     String cartContents = "1) Brake Pads and Calipers quantity: 1, total cost:455.65 ";
     String addedFilterMessage = "Air Filter has been added to the shopping cart. ";
@@ -364,11 +364,12 @@ public class TestOrderingSystem
     String removalError = "Enter a number between 1 and 2: ";
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $11.95 Shipping: $10.00 " +
-            "Tax: $0.00 Grand total: $21.95 ";
+            "Tax: $0.00 Grand total: $21.95 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             + Messages.menu2 + catalogText + Messages.quantityToAddPrompt + addedFilterMessage
-            + Messages.menu2 + Messages.removeNumberPrompt + shoppingCart2 + removalError + removalError+ removalError+ Messages.removedMessage
+            + Messages.menu2 + Messages.removeNumberPrompt + shoppingCart2 + removalError + removalError
+            + removalError + removalError + Messages.removedMessage
             + Messages.menu2 + lastMessage;
     RunTestOrder(simulatedInput, expected);
   }
@@ -388,7 +389,7 @@ public class TestOrderingSystem
     String removalError = "Enter a number between 1 and 2: ";
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $11.95 Shipping: $10.00 " +
-            "Tax: $0.00 Grand total: $21.95 ";
+            "Tax: $0.00 Grand total: $21.95 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             + Messages.menu2 + catalogText + Messages.quantityToAddPrompt + addedFilterMessage
@@ -409,7 +410,7 @@ public class TestOrderingSystem
 
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $467.60 Shipping: $0.00 " +
-            "Tax: $0.00 Grand total: $467.60 ";
+            "Tax: $0.00 Grand total: $467.60 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             + Messages.menu2 + catalogText + Messages.quantityToAddPrompt + addedFilterMessage
@@ -433,7 +434,7 @@ public class TestOrderingSystem
 
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $50.01 Shipping: $0.00 " +
-            "Tax: $0.00 Grand total: $50.01 ";
+            "Tax: $0.00 Grand total: $50.01 Transaction completed";
 
     String expected = startupString + testCatalogText + Messages.quantityToAddPrompt + addedMessage1
             + Messages.menu2 + totalMessage1
@@ -450,18 +451,20 @@ public class TestOrderingSystem
   {
     // This is NJ, no tax, no shipping because it's over the limit
     // This will try to change the quantity but it will try to change product #2 when there is just one
-    String simulatedInput = "Paul\nNJ\nS\nA\n13\n100\nE\n2\n1\n99\nO\n";
+    String simulatedInput = "Paul\nNJ\nS\nA\n13\n100\nE\n2\n1\nSix\n99\nO\n";
 
     String cartContents = "1) Brake Pads and Calipers quantity: 100, total cost:45,565.00 ";
+    String QuantityError = "Enter a number between 1 and 100: ";
 
     String quantityErrorMessage = "Enter a number between 1 and 1: ";
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $45,109.35 Shipping: $0.00 " +
-            "Tax: $0.00 Grand total: $45,109.35 ";
+            "Tax: $0.00 Grand total: $45,109.35 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedPadsMessage
             + Messages.menu2 + Messages.editNumberPrompt + cartContents + quantityErrorMessage
-            + Messages.newQuantityPrompt + Messages.quantityUpdatedMessage + Messages.menu2 + lastMessage;
+            + Messages.newQuantityPrompt + QuantityError + Messages.quantityUpdatedMessage
+            + Messages.menu2 + lastMessage;
     RunTestOrder(simulatedInput, expected);
   }
 
@@ -476,7 +479,7 @@ public class TestOrderingSystem
 
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $24,995.00 Shipping: $0.00 " +
-            "Tax: $0.00 Grand total: $24,995.00\n";
+            "Tax: $0.00 Grand total: $24,995.00\nTransaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedMessage
             + Messages.menu2 + Messages.editNumberPrompt + cartContents  + Messages.newQuantityPrompt  + Messages.orderTooLargeMessage
@@ -496,7 +499,7 @@ public class TestOrderingSystem
 
     String lastMessage = "Thank you for the order, Paul Your order will be sent using standard shipping. " +
             "Your total cost is: Total cost of items in cart: $99,991.95 Shipping: $0.00 " +
-            "Tax: $0.00 Grand total: $99,991.95 ";
+            "Tax: $0.00 Grand total: $99,991.95 Transaction completed";
 
     String expected = startupString + catalogText + Messages.quantityToAddPrompt + addedMessage1
             + Messages.menu2 + catalogText + Messages.quantityToAddPrompt + addedMessage2
